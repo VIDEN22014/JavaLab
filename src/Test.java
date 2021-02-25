@@ -1,6 +1,12 @@
+import java.util.Random;
+
 public class Test {
     public static void main(String[] args) {
-        int x=78;
-        System.out.println(++x);
-    }
+        Random random = new Random();
+        int x;
+        while (true){
+            x=random.nextInt(2);
+            System.out.println(x);
+        }
+    }  
 }
