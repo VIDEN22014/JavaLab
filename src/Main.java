@@ -8,8 +8,7 @@ import com.data.Data;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        JsonGetFromServer jsonGetFromServer = new JsonGetFromServer();
-        java.util.List<String> cityNames = new ArrayList<String>();
+        java.util.List<String> cityNames = new ArrayList<>();
         File file = new File("C://Users/dxbog/IdeaProjects/JavaLab/src/CityNames.txt");
         FileReader fr = new FileReader(file);
         BufferedReader reader = new BufferedReader(fr);
@@ -18,11 +17,10 @@ public class Main {
             cityNames.add(line);
             line = reader.readLine();
         }
-        JSON json = new JSON();
-        Data data = json.deserializeFromJsonFile("C://Users/dxbog/IdeaProjects/JavaLab/src/Forecast.json");
+        Data data;
         for (String cityName : cityNames) {
-            if (jsonGetFromServer.sendGET(cityName)) {
-                data = json.deserializeFromJsonFile("C://Users/dxbog/IdeaProjects/JavaLab/src/Forecast.json");
+            if (JsonGetFromServer.sendGET(cityName)) {
+                data = JSON.deserializeFromJsonFile("C://Users/dxbog/IdeaProjects/JavaLab/src/Forecast.json");
                 System.out.println("Прогноз температури для міста : " + cityName);
                 for (com.data.List i : data.list) {
                     System.out.println(i.dtTxt + " Температура: " + (int) (i.main.temp - 273.15) + "°C");
@@ -30,7 +28,7 @@ public class Main {
             } else {
                 System.out.println("Введіть правильну назву міста");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 }
