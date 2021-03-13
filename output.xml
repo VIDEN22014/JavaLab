@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<order id="1">
+    <!--Важливе замовлення для Івасика-Телесика-->
+    <person>Івасик-Телесик</person>
+    <item id="1" status="delivered">
+        <title>Гуси-лебеді</title>
+        <quantity>5</quantity>
+    </item>
+</order>
