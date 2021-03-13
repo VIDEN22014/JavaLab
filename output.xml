@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<order id="1">
-    <!--Важливе замовлення для Івасика-Телесика-->
-    <person>Івасик-Телесик</person>
-    <item id="1" status="delivered">
-        <title>Гуси-лебеді</title>
-        <quantity>5</quantity>
-    </item>
-</order>
+<kml>
+    <Document>
+        <Style id="green">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
+                    <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="blue">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pushpin/ltblu-pushpin.png</href>
+                    <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Folder>
+            <name>Українські Карпати - Блуд</name>
+            <Folder>
+                <name>L-35-003</name>
+            </Folder>
+        </Folder>
+    </Document>
+</kml>
