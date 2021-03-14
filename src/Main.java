@@ -9,7 +9,7 @@ import com.data.Data;
 public class Main {
     public static void main(String[] args) throws IOException {
         java.util.List<String> cityNames = new ArrayList<>();
-        File file = new File("C://Users/dxbog/IdeaProjects/JavaLab/src/CityNames.txt");
+        File file = new File("src/CityNames.txt");
         FileReader fr = new FileReader(file);
         BufferedReader reader = new BufferedReader(fr);
         String line = reader.readLine();
@@ -20,7 +20,7 @@ public class Main {
         Data data;
         for (String cityName : cityNames) {
             if (JsonGetFromServer.sendGET(cityName)) {
-                data = JSON.deserializeFromJsonFile("C://Users/dxbog/IdeaProjects/JavaLab/src/Forecast.json");
+                data = JSON.deserializeFromJsonFile("src/Forecast.json");
                 System.out.println("Прогноз температури для міста : " + cityName);
                 for (com.data.List i : data.list) {
                     System.out.println(i.dtTxt + " Температура: " + (int) (i.main.temp - 273.15) + "°C");
