@@ -82,9 +82,9 @@
 <wpt lat="48.764625" lon="25.033465">
   <ele>1563.0144</ele>
   <name>1545</name>
-  <cmt> Багдан</cmt>
-  <desc> Найбільший з куполів РЛC Памір</desc>
-  <link href="http://www.karpaty.com.ua/gps/data/1545.html"/>
+  <cmt> Моя точка</cmt>
+  <desc> Моя точка</desc>
+  <link href="https://www.google.com.ua"/>
   <sym>Flag, Green</sym>
   <extensions>
     <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">

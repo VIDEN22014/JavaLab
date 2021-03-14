@@ -140,7 +140,7 @@ public class KMLCreator {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("output.xml"));
+            StreamResult result = new StreamResult(new File("output.kml"));
 
             transformer.transform(source, result);
             StreamResult consoleResult = new StreamResult(System.out);
