@@ -16,7 +16,6 @@ public class GPXParser {
             doc.getDocumentElement().normalize();
             Node node = doc.getDocumentElement();
             MyNode.clearChildrenNodes(node);
-
             return node;
         } catch (Exception e) {
             e.printStackTrace();
