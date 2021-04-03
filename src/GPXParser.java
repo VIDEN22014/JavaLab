@@ -1,5 +1,6 @@
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,8 +15,9 @@ public class GPXParser {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
-            Node node = doc.getDocumentElement();
-            MyNode.clearChildrenNodes(node);
+            //
+            Node node = doc.getDocumentElement().getElementsByTagName("trk").item(0);
+            node=MyNode.getChildNodeByName(node,"trkseg");
             return node;
         } catch (Exception e) {
             e.printStackTrace();

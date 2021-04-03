@@ -4,116 +4,120 @@ import org.w3c.dom.NodeList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
+import java.util.HashSet;
 
 public class SQLCommand {
     public static void createTableIfNotExist() {
         try {
-            Main.connection.createStatement().execute("CREATE TABLE if not exists waypoints "
+            Main.connection.createStatement().execute("CREATE TABLE if not exists Waypoints "
                     + "( id INT NOT NULL AUTO_INCREMENT, "
-                    + "name CHAR(100) NOT NULL, "
-                    + "lat double NOT NULL, "
-                    + "lon double NOT NULL,"
+                    + "trackName CHAR(100) NOT NULL, "
+                    + "point CHAR(100) NOT NULL, "
+                    + "PRIMARY KEY (id))");
+            Main.connection.createStatement().execute("CREATE TABLE if not exists TempTable1 "
+                    + "( id INT NOT NULL AUTO_INCREMENT, "
+                    + "trackName CHAR(100) NOT NULL, "
+                    + "point CHAR(100) NOT NULL, "
+                    + "PRIMARY KEY (id))");
+            Main.connection.createStatement().execute("CREATE TABLE if not exists TempTable2 "
+                    + "( id INT NOT NULL AUTO_INCREMENT, "
+                    + "trackName CHAR(100) NOT NULL, "
+                    + "point CHAR(100) NOT NULL, "
                     + "PRIMARY KEY (id))");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void display() {
-        try {
-            ResultSet rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints");
-            display(rs);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void displayByRange() {
-        try {
-            ResultSet rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints WHERE (lat between 47.746465 AND 48.764625) AND ( lon between 25.031869 AND 25.19399)");
-            display(rs);
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
-
-    public static void display(ResultSet rs) {
-        try {
-            System.out.printf("%-3s%-53s%-10s%-10s%n", "id", "name", "lon", "lat");
-            while (rs.next()) {
-                String name = rs.getString(2);
-                if (name.length() > 50) {
-                    name = name.substring(0, 50);
-                }
-                System.out.printf("%-3s%-53s%-10s%-10s%n", rs.getInt(1), name, rs.getString(3), rs.getString(4));
-            }
-            System.out.println();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteByID(int ID) {
-        try {
-            Main.connection.createStatement().execute("DELETE  FROM waypoints WHERE id= " + ID);
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
 
     public static void clearTable() {
         try {
-            Main.connection.createStatement().execute("TRUNCATE TABLE waypoints");
+            Main.connection.createStatement().execute("TRUNCATE TABLE Waypoints");
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
-    public static void updateTable() {
+    public static void clearTempTable() {
         try {
-            int id;
-            String description;
-            String query;
-            System.out.println("Введіть id:\n");
-            Scanner in1 = new Scanner(System.in);
-            id = Integer.parseInt(in1.nextLine());
-            System.out.println("Введіть новий текст мітки:");
-            description = in1.nextLine();
-            query = "UPDATE waypoints SET name =? WHERE id=?";
-            PreparedStatement stmt = Main.connection.prepareStatement(query);
-            stmt.setString(1, description);
-            stmt.setInt(2, id);
-            stmt.execute();
+            Main.connection.createStatement().execute("TRUNCATE TABLE TempTable1");
+            Main.connection.createStatement().execute("TRUNCATE TABLE TempTable2");
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
-    public static void insert(String name, double latitute, double longitude) {
+
+    public static void insert(String trackName, String point) {
         try {
-            String query = "insert into waypoints (name,lat,lon)" + "values(?,?,?)";
+            String query = "insert into Waypoints (trackName,point)" + "values(?,?)";
             PreparedStatement prepareStatement = Main.connection.prepareStatement(query);
-            prepareStatement.setString(1, name);
-            prepareStatement.setDouble(2, latitute);
-            prepareStatement.setDouble(3, longitude);
+            prepareStatement.setString(1, trackName);
+            prepareStatement.setString(2, point);
             prepareStatement.execute();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
-    public static void ParseFromFile(Node node) {
-        clearTable();
-        String name;
+
+    public static void fillTempTable(String trkName1, String trkName2) {
+        try {
+            clearTempTable();
+            ResultSet rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints WHERE trackName = " + trkName1);
+            while (rs.next()) {
+                String query = "insert into TempTable1 (trackName,point)" + "values(?,?)";
+                PreparedStatement prepareStatement = Main.connection.prepareStatement(query);
+                prepareStatement.setString(1, rs.getString(2));
+                prepareStatement.setString(2, rs.getString(3));
+                prepareStatement.execute();
+            }
+            rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints WHERE trackName = " + trkName2);
+            while (rs.next()) {
+                String query = "insert into TempTable2 (trackName,point)" + "values(?,?)";
+                PreparedStatement prepareStatement = Main.connection.prepareStatement(query);
+                prepareStatement.setString(1, rs.getString(2));
+                prepareStatement.setString(2, rs.getString(3));
+                prepareStatement.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void innerJoin() {
+        try {
+            int counter = 0;
+            ResultSet rs = Main.connection.createStatement().executeQuery("SELECT *\n" +
+                    "FROM mydatabase.temptable1\n" +
+                    "INNER JOIN mydatabase.temptable2\n" +
+                    "ON mydatabase.temptable1.point = mydatabase.temptable2.point ");
+            while (rs.next()) {
+                counter++;
+            }
+            System.out.println(counter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void parseFromFile(String fileName, String trackName, int depth) {
+        Node node = GPXParser.parseGPX(fileName);
+        HashSet<String> hashSet = new HashSet<>();
+
         double latitute;
         double longitude;
+        MyNode.clearChildrenNodes(node);
         NodeList nodesList = node.getChildNodes();
         for (int i = 0; i < nodesList.getLength(); i++) {
             longitude = Double.parseDouble(nodesList.item(i).getAttributes().getNamedItem("lon").getNodeValue());
             latitute = Double.parseDouble(nodesList.item(i).getAttributes().getNamedItem("lat").getNodeValue());
-            name = MyNode.getChildNodeByName(nodesList.item(i), "desc").getChildNodes().item(0).getNodeValue();
-            insert(name, latitute, longitude);
+            String point = CoordinatesConvertor.recursionConvert(longitude, latitute, depth);
+            hashSet.add(point);
+//
+        }
+        for (String str : hashSet) {
+            insert(trackName, str);
         }
     }
 }
