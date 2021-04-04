@@ -1,4 +1,3 @@
-import org.w3c.dom.Node;
 
 import java.sql.*;
 import java.util.*;
@@ -6,10 +5,9 @@ import java.util.*;
 public class Main {
 
     static Connection connection;
-    static Scanner in = new Scanner(System.in);
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "root", "mysqlgovno");
         } catch (SQLException e) {
@@ -20,13 +18,18 @@ public class Main {
         //
         SQLCommand.createTableIfNotExist();
         SQLCommand.clearTable();
-        int depth = 20;
+        Scanner in = new Scanner(System.in);
+        System.out.println("Введіть довжину рядка : ");
+        int depth = in.nextInt();
+        System.out.println("Запис даних в таблицю");
         SQLCommand.parseFromFile("10.gpx", "10", depth);
         SQLCommand.parseFromFile("71.gpx", "71", depth);
         SQLCommand.parseFromFile("73.gpx", "73", depth);
-
-        SQLCommand.fillTempTable("10", "71");
-
-        SQLCommand.innerJoin();
+        System.out.println("Запис даних завершено");
+        System.out.println("Розмір прямокутинка : " + 180.0 / Math.pow(2, (depth - 1)) + " x " + 90.0 / Math.pow(2, (depth - 1)) + " градусів");
+        System.out.println("Розмір прямокутинка : " + 180.0 / Math.pow(2, (depth - 1)) / 360.0 * 40000000 + " x " + 90.0 / Math.pow(2, (depth - 1)) / 180.0 * 20000000 + " метрів");
+        while (true) {
+            MyTrack.trackCompare();
+        }
     }
 }

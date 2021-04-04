@@ -1,4 +1,13 @@
-public class CoordinatesConvertor {
+import java.util.Scanner;
+
+public class MyTrack {
+    public static void trackCompare() {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Введіть назви треків для порівняння : ");
+        SQLCommand.fillTempTable(in.nextLine());
+        SQLCommand.innerJoin(in.nextLine());
+    }
+
     public static String recursionConvert(double longitude, double latitude, int depth) {
         StringBuilder temp = new StringBuilder("0");
         temp = recursionConvert(longitude, latitude, depth, 0, temp, -180, 90);

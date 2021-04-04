@@ -14,12 +14,7 @@ public class SQLCommand {
                     + "trackName CHAR(100) NOT NULL, "
                     + "point CHAR(100) NOT NULL, "
                     + "PRIMARY KEY (id))");
-            Main.connection.createStatement().execute("CREATE TABLE if not exists TempTable1 "
-                    + "( id INT NOT NULL AUTO_INCREMENT, "
-                    + "trackName CHAR(100) NOT NULL, "
-                    + "point CHAR(100) NOT NULL, "
-                    + "PRIMARY KEY (id))");
-            Main.connection.createStatement().execute("CREATE TABLE if not exists TempTable2 "
+            Main.connection.createStatement().execute("CREATE TABLE if not exists TempTable "
                     + "( id INT NOT NULL AUTO_INCREMENT, "
                     + "trackName CHAR(100) NOT NULL, "
                     + "point CHAR(100) NOT NULL, "
@@ -34,16 +29,15 @@ public class SQLCommand {
         try {
             Main.connection.createStatement().execute("TRUNCATE TABLE Waypoints");
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
     public static void clearTempTable() {
         try {
-            Main.connection.createStatement().execute("TRUNCATE TABLE TempTable1");
-            Main.connection.createStatement().execute("TRUNCATE TABLE TempTable2");
+            Main.connection.createStatement().execute("TRUNCATE TABLE TempTable");
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -56,25 +50,17 @@ public class SQLCommand {
             prepareStatement.setString(2, point);
             prepareStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
 
-    public static void fillTempTable(String trkName1, String trkName2) {
+    public static void fillTempTable(String trkName) {
         try {
             clearTempTable();
-            ResultSet rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints WHERE trackName = " + trkName1);
+            ResultSet rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints WHERE trackName = " + trkName);
             while (rs.next()) {
-                String query = "insert into TempTable1 (trackName,point)" + "values(?,?)";
-                PreparedStatement prepareStatement = Main.connection.prepareStatement(query);
-                prepareStatement.setString(1, rs.getString(2));
-                prepareStatement.setString(2, rs.getString(3));
-                prepareStatement.execute();
-            }
-            rs = Main.connection.createStatement().executeQuery("SELECT * FROM waypoints WHERE trackName = " + trkName2);
-            while (rs.next()) {
-                String query = "insert into TempTable2 (trackName,point)" + "values(?,?)";
+                String query = "insert into TempTable (trackName,point)" + "values(?,?)";
                 PreparedStatement prepareStatement = Main.connection.prepareStatement(query);
                 prepareStatement.setString(1, rs.getString(2));
                 prepareStatement.setString(2, rs.getString(3));
@@ -85,17 +71,23 @@ public class SQLCommand {
         }
     }
 
-    public static void innerJoin() {
+    public static void innerJoin(String trkName) {
         try {
-            int counter = 0;
+            int joinCounter = 0;
+            int tempTableCounter = 0;
             ResultSet rs = Main.connection.createStatement().executeQuery("SELECT *\n" +
-                    "FROM mydatabase.temptable1\n" +
-                    "INNER JOIN mydatabase.temptable2\n" +
-                    "ON mydatabase.temptable1.point = mydatabase.temptable2.point ");
+                    "FROM mydatabase.temptable\n" +
+                    "INNER JOIN mydatabase.waypoints\n" +
+                    "ON mydatabase.temptable.point = mydatabase.waypoints.point AND mydatabase.waypoints.trackName = " + trkName);
             while (rs.next()) {
-                counter++;
+                joinCounter++;
             }
-            System.out.println(counter);
+            rs = Main.connection.createStatement().executeQuery("SELECT * FROM temptable");
+            while (rs.next()) {
+                tempTableCounter++;
+            }
+            System.out.println(joinCounter + "/" + tempTableCounter + " Точок співпадають");
+            System.out.println("Процент співпадіння : " + ((double) joinCounter / (double) tempTableCounter) * 100.0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,7 +96,6 @@ public class SQLCommand {
     public static void parseFromFile(String fileName, String trackName, int depth) {
         Node node = GPXParser.parseGPX(fileName);
         HashSet<String> hashSet = new HashSet<>();
-
         double latitute;
         double longitude;
         MyNode.clearChildrenNodes(node);
@@ -112,9 +103,8 @@ public class SQLCommand {
         for (int i = 0; i < nodesList.getLength(); i++) {
             longitude = Double.parseDouble(nodesList.item(i).getAttributes().getNamedItem("lon").getNodeValue());
             latitute = Double.parseDouble(nodesList.item(i).getAttributes().getNamedItem("lat").getNodeValue());
-            String point = CoordinatesConvertor.recursionConvert(longitude, latitute, depth);
+            String point = MyTrack.recursionConvert(longitude, latitute, depth);
             hashSet.add(point);
-//
         }
         for (String str : hashSet) {
             insert(trackName, str);
