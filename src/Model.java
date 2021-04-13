@@ -33,7 +33,7 @@ public class Model {
         StringBuilder tempStringBuilder = new StringBuilder();
         String borderString = "_".repeat(58) + "\n";
         //Формування Верхньої межі
-        //
+
         tempStringBuilder.append(String.format("%6s | %15s | %15s | %3s | %5s |%n", "ID", "Ім'я", "Прізвище", "Вік", "Зріст"));
         for (Person i : modelList) {
             tempStringBuilder.append(borderString);
@@ -48,7 +48,6 @@ public class Model {
             tempStringBuilder.append(String.format("%6s | %15s | %15s | %3s | %5s |%n", i.Id, tempFirstName, tempLastName, i.age, i.height));
         }
         return tempStringBuilder.toString();
-
     }
 
     public void sortById() {
@@ -90,25 +89,21 @@ public class Model {
             scanner.nextLine();
             scanner.useDelimiter(" \\|");
 
-            try {
-                while (true) {
-                    tempLine = scanner.next();
-                    if (tempLine == null || tempLine.equals("") || tempLine.equals("\n")) {
-                        break;
-                    }
-                    int Id = Integer.parseInt(tempLine.replaceAll("[\\n ]", ""));
-
-                    String firstName = scanner.next().replaceAll("^ +", "");
-                    String lastname = scanner.next().replaceAll("^ +", "");
-
-                    int age = Integer.parseInt(scanner.next().replaceAll(" ", ""));
-
-                    int height = Integer.parseInt(scanner.next().replaceAll(" ", ""));
-
-                    add(Id, firstName, lastname, age, height);
+            while (true) {
+                tempLine = scanner.next();
+                if (tempLine == null || tempLine.equals("") || tempLine.equals("\n")) {
+                    break;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                int Id = Integer.parseInt(tempLine.replaceAll("[\\n ]", ""));
+
+                String firstName = scanner.next().replaceAll("^ +", "");
+                String lastname = scanner.next().replaceAll("^ +", "");
+
+                int age = Integer.parseInt(scanner.next().replaceAll(" ", ""));
+
+                int height = Integer.parseInt(scanner.next().replaceAll(" ", ""));
+
+                add(Id, firstName, lastname, age, height);
             }
 
             bufferedReader.close();
