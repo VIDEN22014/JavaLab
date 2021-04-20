@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Forest {
-    List<Bird> birdList = new ArrayList<Bird>();
+    List<Bird> birdList = new ArrayList<>();
     FactoryProducer factoryProducer = new FactoryProducer();
 
     void create() {
