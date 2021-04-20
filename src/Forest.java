@@ -1,12 +1,11 @@
-import Birds.Bird;
-import Birds.PredatorBird;
-import Factorys.FactoryProducer;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import Birds.*;
+import Factorys.*;
+
 public class Forest {
-    List<Bird> birdList = new ArrayList<>();
+    List<Bird> birdList = new ArrayList<Bird>();
     FactoryProducer factoryProducer = new FactoryProducer();
 
     void create() {
