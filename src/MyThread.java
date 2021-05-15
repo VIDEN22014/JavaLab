@@ -1,12 +1,14 @@
 public class MyThread implements Runnable {
     SimpsonMethod method;
+    AreaAdder adder;
 
-    MyThread(SimpsonMethod method) {
+    MyThread(SimpsonMethod method,AreaAdder adder) {
         this.method = method;
+        this.adder=adder;
     }
 
     @Override
-    public synchronized void run() {
-        SimpsonMethod.area += method.Integrate();
+    public void run() {
+        this.adder.areaAdd(this.method.Integrate());
     }
 }

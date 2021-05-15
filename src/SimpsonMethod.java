@@ -5,21 +5,20 @@ public class SimpsonMethod {
         this.step = step;
     }
 
-    public static double area;
     double leftBorder;
     double rightBorder;
     double step;
 
-    public synchronized double Integrate() {
-        double tempArea=0;
+    public double Integrate() {
+        double area=0;
         double tempSum = 0;
         double numOfPartition = (rightBorder - leftBorder) / step, x;
-        tempArea += getY(leftBorder) + getY(rightBorder);
+        area += getY(leftBorder) + getY(rightBorder);
         for (x = leftBorder + step / 2; x < rightBorder; x += step) {
             tempSum += getY(x);
         }
         tempSum *= 4.0;
-        tempArea += tempSum;
+        area += tempSum;
         tempSum = 0;
         x = leftBorder + step;
         for (double i = 1; i < numOfPartition; i++) {
@@ -27,9 +26,9 @@ public class SimpsonMethod {
             x += step;
         }
         tempSum *= 2.0;
-        tempArea += tempSum;
-        tempArea *= (step / 6);
-        return tempArea;
+        area += tempSum;
+        area *= (step / 6);
+        return area;
     }
 
     public double getY(double x) {

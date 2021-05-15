@@ -1,18 +1,25 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class ThreadController {
-    public double  ParallelIntegrate(int countOfDivides, double leftBorder, double rightBorder, double step) {
+    public synchronized double ParallelIntegrate(int countOfDivides, double leftBorder, double rightBorder, double step,AreaAdder adder) {
         double shift = rightBorder / (double) countOfDivides;
-        SimpsonMethod.area = 0;
+        List<Thread> threadList=new ArrayList<>();
         for (int i = 0; i < countOfDivides; i++) {
             SimpsonMethod method = new SimpsonMethod(leftBorder, leftBorder + shift, step);
-            Thread t = new Thread(new MyThread(method));
+            Thread t = new Thread(new MyThread(method,adder));
             t.start();
+            threadList.add(t);
+            leftBorder += shift;
+        }
+        //Завершує виконання всіх потоків
+        for (int i = 0; i < countOfDivides; i++) {
             try {
-                t.join();
+                threadList.get(i).join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            leftBorder += shift;
         }
-        return SimpsonMethod.area;
+        return adder.area;
     }
 }
