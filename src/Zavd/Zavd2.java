@@ -10,7 +10,7 @@ public class Zavd2 {
         //Зчитування Файлу
         String inputString = MyBufferedFileReader.readFile(fileName);
 
-        //Регекс для пошуку посилань
+        //Регекс
         final String regex = "<td[^>]+>(|\\n|.)+<\\/td>";
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(inputString);
