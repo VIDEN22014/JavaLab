@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Zavd2 {
+public class Zavd3 {
     public static void start(String fileName) {
         //Зчитування Файлу
         String inputString = MyBufferedFileReader.readFile(fileName);
