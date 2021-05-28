@@ -14,17 +14,16 @@ public class MyBufferedFileReader {
             e.printStackTrace();
         }
         StringBuilder tempStringBuilder = new StringBuilder();
-        String inputString = "";
+        String tempString = "";
         while (true) {
             try {
-                if (!((inputString = bufferedReader.readLine()) != null)) break;
+                if (!((tempString = bufferedReader.readLine()) != null)) break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            tempStringBuilder.append(inputString);
+            tempStringBuilder.append(tempString);
             tempStringBuilder.append("\n");
         }
-        inputString = tempStringBuilder.toString();
-        return inputString;
+        return tempStringBuilder.toString();
     }
 }

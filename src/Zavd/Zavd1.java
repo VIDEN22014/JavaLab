@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Zavd1 {
+    /*Напишіть скрипт, котрий відкриває файл in.html, знаходить у ньому посилання типу <a href = " ... ">
+    та записує знайдені адреси у файл out.html у вигляді таблиці.*/
     public static void start(String fileName) {
         //Зчитування Файлу
         String inputString = MyBufferedFileReader.readFile(fileName);
@@ -14,6 +16,7 @@ public class Zavd1 {
         final String regex = "<a href = \"(\\S+)\">((.|\\n)[^<\\/a>])*<\\/a>";
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(inputString);
+        //
         List<String> hrefList = new ArrayList<>();
 
         while (matcher.find()) {
@@ -21,5 +24,6 @@ public class Zavd1 {
         }
         //Виклик функції для побудови Html таблиці
         HtmlTableCreator.createHtmlTable(hrefList, "Zavd/Zavd1/out1.html");
+        hrefList.clear();
     }
 }

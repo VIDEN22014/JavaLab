@@ -14,7 +14,7 @@ import java.io.File;
 import java.util.List;
 
 public class HtmlTableCreator {
-    public static void createHtmlTable(List<String> stringList, String outFileName){
+    public static <T> void createHtmlTable(List<T> stringList, String outFileName) {
         //Побудова Html таблиці
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -49,15 +49,24 @@ public class HtmlTableCreator {
         bodyElement.appendChild(tableElement);
 
         int counter = 1;
-        for (String i : stringList) {
+        for (T item : stringList) {
             Element trElement = doc.createElement("tr");
             tableElement.appendChild(trElement);
             Element tdElement = doc.createElement("td");
             tdElement.appendChild(doc.createTextNode(String.valueOf(counter)));
             trElement.appendChild(tdElement);
-            Element td1Element = doc.createElement("td");
-            td1Element.appendChild(doc.createTextNode(i));
-            trElement.appendChild(td1Element);
+            if (item instanceof Person) {
+                Element td1Element = doc.createElement("td");
+                td1Element.appendChild(doc.createTextNode(((Person) item).getName()));
+                trElement.appendChild(td1Element);
+                Element td2Element = doc.createElement("td");
+                td2Element.appendChild(doc.createTextNode(((Person) item).getPhone()));
+                trElement.appendChild(td2Element);
+            } else {
+                Element td1Element = doc.createElement("td");
+                td1Element.appendChild(doc.createTextNode((String) item));
+                trElement.appendChild(td1Element);
+            }
             counter++;
         }
 
