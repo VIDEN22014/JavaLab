@@ -16,7 +16,7 @@ public class Zavd2 {
 
         //Регекс для першої частини
         final String regex1 = "<br />\\s*\\n(.*)<br />\\s*\\n(.*)</td>\\s*\\n<td.*>(.*)</td>";
-        final String regex2 = "<br />\\s*\\n(.*)<br />\\s*\\n(.*)</td>\\s*\\n<td.*width: 26.2136%(.*)</td>";
+        final String regex2 = "<br />\\s*\\n(.*)<br />\\s*\\n(.*)</td>\\s*\\n<td.*width: 26.2136%\\\">(.*)</td>";
         final Pattern pattern1 = Pattern.compile(regex1, Pattern.MULTILINE);
         final Pattern pattern2 = Pattern.compile(regex2, Pattern.MULTILINE);
         final Matcher matcher1 = pattern1.matcher(inputString);
